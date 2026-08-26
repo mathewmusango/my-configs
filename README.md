@@ -16,8 +16,6 @@ Dotfiles repo. Modules live in a dedicated folder (e.g. `fastfetch/`) or `.confi
 4. Verify it works on this machine.
 5. Append a row to the table above.
 
-See `.agents/skills/my-configs/` for the full procedure.
-
 ## License
 
 MIT — see [LICENSE](LICENSE).
