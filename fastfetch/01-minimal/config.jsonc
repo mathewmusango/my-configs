@@ -1,0 +1,64 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+
+    // Auto-detect the distro logo (Arch), printed to the left of the info
+    "logo": {
+        "type": "auto",
+        "padding": {
+            "right": 2
+        }
+    },
+
+    "display": {
+        "separator": ": ",
+        "color": {
+            "keys": "cyan",
+            "title": "light_cyan"
+        }
+    },
+
+    "modules": [
+        {
+            "type": "title",
+            "color": {
+                "user": "light_cyan",
+                "at": "white",
+                "host": "cyan"
+            }
+        },
+        "separator",
+
+        // System
+        "os",
+        "host",
+        "kernel",
+        "uptime",
+        "packages",
+        "shell",
+        "break",
+
+        // Desktop environment
+        "de",
+        "wm",
+        "theme",
+        "icons",
+        "font",
+        "terminal",
+        "terminalfont",
+        "break",
+
+        // Hardware
+        "cpu",
+        "gpu",
+        "memory",
+        "disk",
+        "break",
+
+        // Network & power
+        "localip",
+        "battery",
+        "break",
+
+        "colors"
+    ]
+}
