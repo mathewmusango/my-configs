@@ -1,6 +1,6 @@
 # my-configs
 
-Dotfiles repo. Modules live in a dedicated folder (e.g. `fastfetch/`) or `.config/<app>/`; each module has a `README.md` recording setup steps.
+My configs repo. Modules live in a dedicated folder (e.g. `fastfetch/`) or `.config/<app>/`; each module has a `README.md` recording setup steps.
 
 ## Modules
 
