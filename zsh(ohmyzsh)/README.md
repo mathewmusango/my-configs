@@ -11,8 +11,6 @@
 - history-substring-search
 - syntax-highlighting
 
-[![zsh prompt](screenshot.png)](screenshot.png)
-
 ## Setup
 
 **1. Install zsh, git, curl** (git + curl are prerequisites for the Oh My Zsh installer)
@@ -85,3 +83,7 @@ p10k configure
 ```
 
 `p10k configure` is an interactive wizard for prompt style/colors; it writes `~/.p10k.zsh`, which the config sources automatically.
+
+### Screenshots
+
+[![zsh prompt](screenshot.png)](screenshot.png)

@@ -64,7 +64,7 @@ fastfetch
 fastfetch
 ```
 
-### Designs
+### Screenshots
 
 | 01 — Minimal (default) | 02 — Tree / Box |
 |---|---|
