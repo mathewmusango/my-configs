@@ -11,6 +11,8 @@
 - history-substring-search
 - syntax-highlighting
 
+[![zsh prompt](screenshot.png)](screenshot.png)
+
 ## Setup
 
 **1. Install zsh, git, curl** (git + curl are prerequisites for the Oh My Zsh installer)
