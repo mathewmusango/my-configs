@@ -28,7 +28,9 @@ jobs:
         run: |
           set -e
           for d in fastfetch/*/; do
-            [ -f "$d/config.jsonc" ] && [ -f "$d/screenshot.png" ] \
-              || { echo "incomplete design: $d"; exit 1; }
+            if [ ! -f "$d/config.jsonc" ] || [ ! -f "$d/screenshot.png" ]; then
+              echo "incomplete design: $d"
+              exit 1
+            fi
           done
           echo "all designs complete"
