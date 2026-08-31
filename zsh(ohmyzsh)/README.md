@@ -11,7 +11,7 @@
 - history-substring-search
 - syntax-highlighting
 
-## Setup
+### Setup
 
 **1. Install zsh, git, curl** (git + curl are prerequisites for the Oh My Zsh installer)
 
@@ -27,7 +27,7 @@ sudo dnf install zsh git curl
 > **Note — Nerd Font:** the p10k prompt needs a Nerd Font (MesloLGS NF) — install it and select it in your terminal, or icons render as `□`. The same font also covers the fastfetch design icons:
 > ```sh
 > # Arch
-> sudo pacman -S ttf-meslo-nerd-font-powerlevel10k
+> yay -S ttf-meslo-nerd-font-powerlevel10k
 >
 > # Debian/Ubuntu + Fedora (no package — download the TTFs)
 > mkdir -p ~/.local/share/fonts
@@ -37,6 +37,8 @@ sudo dnf install zsh git curl
 > curl -fLo ~/.local/share/fonts/MesloLGS\ NF\ Bold\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
 > fc-cache -f ~/.local/share/fonts
 > ```
+>
+> **yay** is an AUR helper for Arch — see the [`yay`](../yay/README.md) module.
 
 **2. Make zsh the default shell**
 

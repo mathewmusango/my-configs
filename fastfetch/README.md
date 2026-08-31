@@ -23,7 +23,7 @@ sudo dnf install fastfetch
 > **Note — Nerd Font:** the tree design uses Nerd Font icons — install MesloLGS NF and select it in your terminal, or icons render as `□`:
 > ```sh
 > # Arch
-> sudo pacman -S ttf-meslo-nerd-font-powerlevel10k
+> yay -S ttf-meslo-nerd-font-powerlevel10k
 >
 > # Debian/Ubuntu + Fedora (no package — download the TTFs)
 > mkdir -p ~/.local/share/fonts
@@ -33,6 +33,8 @@ sudo dnf install fastfetch
 > curl -fLo ~/.local/share/fonts/MesloLGS\ NF\ Bold\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
 > fc-cache -f ~/.local/share/fonts
 > ```
+>
+> **yay** is an AUR helper for Arch — see the [`yay`](../yay/README.md) module.
 
 ### **3. Preview a design without installing**
 

@@ -3,8 +3,9 @@
 ```text
 my-configs/
   ├── fastfetch/
-  ├── zsh(ohmyzsh)/
   ├── scripts/
+  ├── yay/
+  ├── zsh(ohmyzsh)/
   ├── LICENSE
   └── README.md
 ```
