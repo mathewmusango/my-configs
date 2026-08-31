@@ -4,8 +4,10 @@
 
 ```text
 my-configs/
-└── fastfetch/
-    └── README.md
+├── fastfetch/
+│   └── README.md
+└── scripts/
+    └── check_jsonc.py
 ```
 
 ### License
