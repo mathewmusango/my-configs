@@ -17,7 +17,7 @@
 
 ```sh
 # Arch
-sudo pacman -S zsh git curl
+yay -S zsh git curl
 # Debian/Ubuntu
 sudo apt install zsh git curl
 # Fedora

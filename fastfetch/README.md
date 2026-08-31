@@ -2,22 +2,22 @@
 
 **Config designs for [`Fastfetch`](https://github.com/fastfetch-cli/fastfetch)**.
 
-### **1.Clone**
-
-```sh
-git clone https://github.com/mathewmusango/my-configs.git
-cd my-configs/fastfetch
-```
-
-### **2. Install fastfetch** (if not present)
+### **1. Install fastfetch + git(prerequisite)** (if not present)
 
 ```sh
 # Arch
-sudo pacman -S fastfetch
+yay -S fastfetch git
 # Debian/Ubuntu
 sudo apt install fastfetch
 # Fedora
 sudo dnf install fastfetch
+```
+
+### **2.Clone**
+
+```sh
+git clone https://github.com/mathewmusango/my-configs.git
+cd my-configs/fastfetch
 ```
 
 > **Note — Nerd Font:** the tree design uses Nerd Font icons — install MesloLGS NF and select it in your terminal, or icons render as `□`:

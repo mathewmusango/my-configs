@@ -1,6 +1,6 @@
 # yay (AUR helper)
 
-[`Jguer/yay`](https://github.com/Jguer/yay) — "Yet another Yogurt": an AUR helper for Arch. Needed to install AUR packages like `ttf-meslo-nerd-font-powerlevel10k`.
+[`Yay`](https://github.com/Jguer/yay) — "Yet another Yogurt": an AUR helper for Arch. Needed to install AUR packages like `ttf-meslo-nerd-font-powerlevel10k`.
 
 > **Why yay?** `pacman` covers the official repos only; AUR packages (community PKGBUILDs) need `makepkg`. yay wraps pacman — same commands, plus AUR search and one-step builds: it clones the PKGBUILD to `~/.cache/yay/`, runs `makepkg` (sources + checksums), and installs with `pacman -U`. Arch/Arch-based only (EndeavourOS, Manjaro, CachyOS).
 
