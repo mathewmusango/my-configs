@@ -1,6 +1,6 @@
 # my-configs
 
-## Modules
+### Modules
 
 ```text
 my-configs/
@@ -8,6 +8,6 @@ my-configs/
     └── README.md
 ```
 
-## License
+### License
 
 MIT — see [LICENSE](LICENSE).
