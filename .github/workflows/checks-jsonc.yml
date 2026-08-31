@@ -1,0 +1,34 @@
+name: Checks JSONC
+
+# Validate every fastfetch design config (config.jsonc) parses as JSON, and
+# every design folder ships both files (config.jsonc + screenshot.png). Runs
+# once on main (or dispatch) when any .jsonc or the checker changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.jsonc"
+      - "scripts/check_jsonc.py"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  jsonc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Parse config.jsonc files
+        # jq can't parse JSONC (comments/trailing commas) — strip them, then
+        # json.loads. python3 json is stdlib, no installs.
+        run: python3 scripts/check_jsonc.py
+      - name: Design folders ship config.jsonc + screenshot.png
+        run: |
+          set -e
+          for d in fastfetch/*/; do
+            [ -f "$d/config.jsonc" ] && [ -f "$d/screenshot.png" ] \
+              || { echo "incomplete design: $d"; exit 1; }
+          done
+          echo "all designs complete"
