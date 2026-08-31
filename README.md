@@ -1,13 +1,11 @@
-# my-configs
-
-### Modules
+# My Configs
 
 ```text
 my-configs/
-├── fastfetch/
-│   └── README.md
-└── scripts/
-    └── check_jsonc.py
+  ├── fastfetch/
+  ├── scripts/
+  ├── LICENSE 
+  └── README.md
 ```
 
 ### License
