@@ -71,20 +71,19 @@ git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting    ${ZS
 git clone --depth=1 https://github.com/marlonrichert/zsh-autocomplete        ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autocomplete
 ```
 
-**6. Install this config** — replaces the starter `~/.zshrc` from step 3 with this repo's wired-up one. The theme and plugins from steps 4–5 live in `~/.oh-my-zsh/custom/` and are **not** touched. (Already have this repo? Just run this step.)
+**6. Install this config** — replaces the starter `~/.zshrc` from step 3 with this repo's wired-up one, and installs the ready-made `~/.p10k.zsh` prompt (`.zshrc` sources it automatically). The theme and plugins from steps 4–5 live in `~/.oh-my-zsh/custom/` and are **not** touched. (Already have this repo? Just run this step.)
 
 ```sh
-./zsh(ohmyzsh)/install.sh        # copies zsh(ohmyzsh)/.zshrc -> ~/.zshrc (no symlinks)
+./zsh(ohmyzsh)/install.sh        # copies .zshrc + .p10k.zsh -> ~/ (no symlinks)
 ```
 
-**7. Load and configure the prompt**
+**7. Load the prompt**
 
 ```sh
 exec zsh
-p10k configure
 ```
 
-`p10k configure` is an interactive wizard for prompt style/colors; it writes `~/.p10k.zsh`, which the config sources automatically.
+To re-customize the prompt later, run `p10k configure` (interactive wizard) — it rewrites `~/.p10k.zsh`; re-run `install.sh` to restore the repo version.
 
 ### Screenshots
 
