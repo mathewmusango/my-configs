@@ -1,7 +1,7 @@
-# My Configs
+# dotfiles
 
 ```text
-my-configs/
+dotfiles/
   ├── fastfetch/
   ├── scripts/
   ├── yay/

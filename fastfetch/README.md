@@ -16,8 +16,8 @@ sudo dnf install fastfetch
 ### **2.Clone**
 
 ```sh
-git clone https://github.com/mathewmusango/my-configs.git
-cd my-configs/fastfetch
+gh repo clone mathewmusango/dotfiles
+cd dotfiles/fastfetch
 ```
 
 > **Note — Nerd Font:** the tree design uses Nerd Font icons — install MesloLGS NF and select it in your terminal, or icons render as `□`:
