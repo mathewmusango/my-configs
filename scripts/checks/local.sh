@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # One entry point for the local (stage-1) checks — a thin driver over the
-# compose/checks/compose.yml services. Portable: no host tool installs (the
+# container/checks/compose.yml services. Portable: no host tool installs (the
 # images mirror the CI tools exactly). Default: run every surface whose files
 # changed (diff-gated, mirroring the CI checks skip-model). --full runs all
 # surfaces unconditionally (use for a first run / fresh clone).
@@ -10,7 +10,7 @@
 #   scripts/checks/local.sh --full             # all surfaces, whole repo
 #   scripts/checks/local.sh shell jsonc        # selected surfaces, changed only
 #
-# Surface names match the compose/checks/compose.yml services:
+# Surface names match the container/checks/compose.yml services:
 #   jsonc · shell · yaml (actionlint) · yaml-syntax
 #
 # Pre-commit per-file fast path: scripts/checks/changed.sh (install via
@@ -77,7 +77,7 @@ run_surface() {
     reason="changed"
   fi
   echo "== $svc ($reason) =="
-  podman-compose -f compose/checks/compose.yml run --rm "$svc"
+  podman-compose -f container/checks/compose.yml run --rm "$svc"
 }
 
 status=0

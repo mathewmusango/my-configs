@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 # Run the local checks against CHANGED files only (pre-commit friendly).
-# Whole-repo passes stay in compose/checks/compose.yml (which mirrors CI
+# Whole-repo passes stay in container/checks/compose.yml (which mirrors CI
 # exactly); this is the fast feedback loop for the commit stage. Reuses the
-# same tool images as compose/checks/compose.yml.
+# same tool images as container/checks/compose.yml.
 #
 # Usage:
 #   scripts/checks/changed.sh            # staged + unstaged vs HEAD

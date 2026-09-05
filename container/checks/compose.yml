@@ -9,7 +9,7 @@
 #   scripts/checks/local.sh --full   # all surfaces, whole repo
 #
 # Raw compose loop (same thing, no driver):
-#   podman-compose -f compose/checks/compose.yml run --rm <service>
+#   podman-compose -f container/checks/compose.yml run --rm <service>
 # Pre-commit per-file fast path: scripts/checks/changed.sh.
 # The GitHub workflows remain the authoritative gate (stage 2). All scans are
 # extension-wide across the whole repo (.git excluded) so NEW files in new

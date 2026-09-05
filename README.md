@@ -3,7 +3,7 @@
 ```text
 dotfiles/
   ├── .githooks/
-  ├── compose/
+  ├── container/
   ├── fastfetch/
   ├── reflector/
   ├── scripts/
