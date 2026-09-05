@@ -3,7 +3,8 @@
 # container/checks/compose.yml services. Portable: no host tool installs (the
 # images mirror the CI tools exactly). Default: run every surface whose files
 # changed (diff-gated, mirroring the CI checks skip-model). --full runs all
-# surfaces unconditionally (use for a first run / fresh clone).
+# surfaces unconditionally (use for a first run / fresh clone). Lists the
+# files each surface checks (indented under the surface header).
 #
 # Usage:
 #   scripts/checks/local.sh                    # all surfaces, changed files only
@@ -37,7 +38,7 @@ for arg in "$@"; do
   case "$arg" in
     --full) MODE="full" ;;
     --diff) MODE="diff" ;;
-    -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,22p' "$0"; exit 0 ;;
     *) SURFACES="$SURFACES $arg" ;;
   esac
 done
@@ -63,6 +64,15 @@ if [ "$MODE" = "diff" ]; then
 fi
 
 # --- Surface → changed-file globs (mirror the CI checks filters) -------------
+surface_glob() {
+  # $1 = surface name; prints the regex its files match (stdout)
+  case "$1" in
+    jsonc)            printf '%s' '\.jsonc$|scripts/checks/jsonc\.py$' ;;
+    shell)            printf '%s' '\.sh$|(^|/)\.githooks/' ;;
+    yaml-actionlint|yaml-syntax) printf '%s' '\.ya?ml$' ;;
+  esac
+}
+
 surface_touched() {
   # $1 = surface name; reads $CHANGED on stdin
   case "$1" in
@@ -70,6 +80,17 @@ surface_touched() {
     shell)            grep -qE '\.sh$|(^|/)\.githooks/' || return 1 ;;
     yaml-actionlint|yaml-syntax) grep -qE '\.ya?ml$' || return 1 ;;
   esac
+}
+
+# Files this surface checks, one per line.
+surface_files() {
+  # $1 = surface name
+  re="$(surface_glob "$1")"
+  if [ "$MODE" = "full" ]; then
+    find . -path './.git' -prune -o -type f -print 2>/dev/null | sed 's#^./##' | grep -E "$re" | sort
+  else
+    printf '%s\n' "$CHANGED" | grep -E "$re" | sort
+  fi
 }
 
 # --- Run ---------------------------------------------------------------------
@@ -86,6 +107,7 @@ for svc in $SURFACES; do
   fi
 
   printf '%s== %s (%s) ==%s\n' "$BOLD" "$svc" "$reason" "$NC"
+  surface_files "$svc" | sed 's#^#    #'
   if podman-compose -f container/checks/compose.yml run --rm "$svc"; then
     printf '%s✅ %s (%s) passed%s\n' "$GREEN" "$svc" "$reason" "$NC"
   else
