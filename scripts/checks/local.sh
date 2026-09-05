@@ -22,6 +22,14 @@ set -eu
 ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 cd "$ROOT"
 
+# Colors only when stdout is a TTY (pipes/logs stay plain).
+if [ -t 1 ]; then
+  ESC=$(printf '\033')
+  BOLD="${ESC}[1m"; GREEN="${ESC}[32m"; YELLOW="${ESC}[33m"; RED="${ESC}[31m"; NC="${ESC}[0m"
+else
+  BOLD=""; GREEN=""; YELLOW=""; RED=""; NC=""
+fi
+
 # --- CLI ---------------------------------------------------------------------
 MODE="diff"   # diff | full
 SURFACES=""
@@ -29,7 +37,7 @@ for arg in "$@"; do
   case "$arg" in
     --full) MODE="full" ;;
     --diff) MODE="diff" ;;
-    -h|--help) sed -n '2,18p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
     *) SURFACES="$SURFACES $arg" ;;
   esac
 done
@@ -65,30 +73,34 @@ surface_touched() {
 }
 
 # --- Run ---------------------------------------------------------------------
-run_surface() {
-  svc="$1"
-  if [ "$MODE" = "full" ]; then
-    reason="full"
-  else
-    if ! printf '%s\n' "$CHANGED" | surface_touched "$svc"; then
-      echo "skip: $svc (no matching files changed)"
-      return 0
-    fi
-    reason="changed"
-  fi
-  echo "== $svc ($reason) =="
-  podman-compose -f container/checks/compose.yml run --rm "$svc"
-}
-
 status=0
 for svc in $SURFACES; do
-  if ! run_surface "$svc"; then
-    echo "FAILED: $svc"
+  if [ "$MODE" = "diff" ]; then
+    if ! printf '%s\n' "$CHANGED" | surface_touched "$svc"; then
+      printf '%s⏭  skip: %s (no matching files changed)%s\n' "$YELLOW" "$svc" "$NC"
+      continue
+    fi
+    reason="changed"
+  else
+    reason="full"
+  fi
+
+  printf '%s== %s (%s) ==%s\n' "$BOLD" "$svc" "$reason" "$NC"
+  if podman-compose -f container/checks/compose.yml run --rm "$svc"; then
+    printf '%s✅ %s (%s) passed%s\n' "$GREEN" "$svc" "$reason" "$NC"
+  else
+    printf '%s❌ %s (%s) failed%s\n' "$RED" "$svc" "$reason" "$NC"
     status=1
   fi
 done
 
 if [ "$MODE" = "diff" ] && [ -z "${CHANGED:-}" ]; then
-  echo "(no changed files detected — nothing to check; use --full for a whole-repo pass)"
+  printf '%s⏭  no changed files detected — nothing to check (use --full for a whole-repo pass)%s\n' "$YELLOW" "$NC"
+fi
+
+if [ "$status" -eq 0 ]; then
+  printf '%s✅ all checks passed%s\n' "$GREEN" "$NC"
+else
+  printf '%s❌ some checks failed%s\n' "$RED" "$NC"
 fi
 exit "$status"
