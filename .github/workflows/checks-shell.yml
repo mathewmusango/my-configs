@@ -1,12 +1,5 @@
 name: "checks/shell"
 
-# Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
-# Shellcheck on every shell script in the repo, plus .githooks/* (extension-
-# wide so NEW shell scripts in new locations are never missed). A native
-# git-diff detect job (no third-party action) gates the check: when the
-# push/PR touches no shell files the check SKIPS — reports success — so
-# requiring it never blocks unrelated commits. Same globs as
-# scripts/checks/local.sh.
 on:
   workflow_call:
 
@@ -19,8 +12,6 @@ jobs:
     outputs:
       changed: ${{ steps.filter.outputs.changed }}
     steps:
-      # fetch-depth 0: push diffs compare against github.event.before, so the
-      # previous commit must exist locally (shallow checkout would fail).
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
@@ -42,7 +33,5 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Shellcheck
-        # ubuntu-latest runners ship shellcheck; the koalaman/shellcheck-action
-        # repo no longer resolves on GitHub ("repository not found").
         run: |
           find . -path './.git' -prune -o -type f \( -name '*.sh' -o -path './.githooks/*' \) -print0 2>/dev/null | xargs -0 -r shellcheck -S warning

@@ -1,11 +1,5 @@
 name: "checks/jsonc"
 
-# Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
-# Validate every fastfetch design config (config.jsonc) parses as JSON, and
-# every design folder ships both files (config.jsonc + screenshot.png). A
-# native git-diff detect job (no third-party action) gates the check: when the
-# push/PR touches no jsonc files it SKIPS — reports success — so requiring it
-# never blocks unrelated commits. Same globs as scripts/checks/local.sh.
 on:
   workflow_call:
 
@@ -18,8 +12,6 @@ jobs:
     outputs:
       changed: ${{ steps.filter.outputs.changed }}
     steps:
-      # fetch-depth 0: push diffs compare against github.event.before, so the
-      # previous commit must exist locally (shallow checkout would fail).
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
@@ -41,11 +33,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Parse config.jsonc files
-        # jq can't parse JSONC (comments/trailing commas) — strip them, then
-        # json.loads. python3 json is stdlib, no installs.
         run: python3 scripts/checks/jsonc.py
       - name: Design folders ship config.jsonc + screenshot.png
-        # No fastfetch/ in a calling repo? Skip (glob has no matches).
         run: |
           set -e
           if ls fastfetch/*/ >/dev/null 2>&1; then
