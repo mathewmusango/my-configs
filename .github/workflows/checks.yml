@@ -18,11 +18,11 @@ permissions:
 
 jobs:
   jsonc:
-    name: Checks / JSONC
+    name: JSONC
     uses: ./.github/workflows/checks/jsonc.yml
   shell:
-    name: Checks / Shell
+    name: Shell
     uses: ./.github/workflows/checks/shell.yml
   yml:
-    name: Checks / YAML
+    name: YAML
     uses: ./.github/workflows/checks/yml.yml
