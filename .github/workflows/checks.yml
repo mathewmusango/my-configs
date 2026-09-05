@@ -2,12 +2,12 @@ name: Checks
 
 # Aggregator: one workflow per repo, name "Checks". Holds the triggers (only
 # top-level workflow files are event-triggered) and calls the per-check
-# reusable workflows check-{jsonc,shell,yml}.yml — each self-gates on a
+# reusable workflows checks-{jsonc,shell,yml}.yml — each self-gates on a
 # dorny/paths-filter diff, so irrelevant checks SKIP (report success) and a
 # ruleset can require them all. GitHub requires reusable workflows at the TOP
 # level of .github/workflows/ (subdirectories are rejected).
 # The reusables can also be called from other repos:
-#   uses: mathewmusango/dotfiles/.github/workflows/check-yml.yml@main
+#   uses: mathewmusango/dotfiles/.github/workflows/checks-yml.yml@main
 # No paths filter here: every push to main runs the aggregator, and each
 # reusable decides whether its check applies.
 on:
@@ -21,10 +21,10 @@ permissions:
 jobs:
   jsonc:
     name: JSONC
-    uses: ./.github/workflows/check-jsonc.yml
+    uses: ./.github/workflows/checks-jsonc.yml
   shell:
     name: Shell
-    uses: ./.github/workflows/check-shell.yml
+    uses: ./.github/workflows/checks-shell.yml
   yml:
     name: YAML
-    uses: ./.github/workflows/check-yml.yml
+    uses: ./.github/workflows/checks-yml.yml
