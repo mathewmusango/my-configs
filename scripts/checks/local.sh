@@ -14,8 +14,9 @@
 # Surface names match the container/checks/compose.yml services:
 #   jsonc · shell · yaml-actionlint · yaml-syntax
 #
-# Pre-commit per-file fast path: scripts/checks/changed.sh (install via
-# `git config core.hooksPath .githooks`).
+# Pre-commit hook (.githooks/pre-commit) execs this script in diff mode, so
+# every commit checks all changed surfaces through compose. Install:
+#   git config core.hooksPath .githooks
 
 set -eu
 

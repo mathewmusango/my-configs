@@ -10,7 +10,7 @@
 #
 # Raw compose loop (same thing, no driver):
 #   podman-compose -f container/checks/compose.yml run --rm <service>
-# Pre-commit per-file fast path: scripts/checks/changed.sh.
+# Pre-commit hook runs scripts/checks/local.sh (compose, diff-gated).
 # The GitHub workflows remain the authoritative gate (stage 2). All scans are
 # extension-wide across the whole repo (.git excluded) so NEW files in new
 # locations are never missed. First run pulls the tool images (network).
