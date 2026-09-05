@@ -20,7 +20,7 @@
 #     at parse time, which emptied loop variables and silently skipped every
 #     file. Image ENTRYPOINTs differ per tool: actionlint's image runs the tool
 #     directly (args only), the alpine images need an explicit sh -c.
-name: repo_check
+name: checks
 services:
   jsonc:
     image: docker.io/library/python:alpine
@@ -36,7 +36,7 @@ services:
       - ../..:/repo:ro
     command: ["sh", "-c", "find . -path './.git' -prune -o -type f \\( -name '*.sh' -o -path './.githooks/*' \\) -print0 2>/dev/null | xargs -0 -r shellcheck -S warning"]
 
-  yaml:
+  yaml-actionlint:
     # raven-actions/actionlint@v2 runs plain `actionlint` — no path args (it
     # scans .github/workflows recursively, covering checks/). The image
     # ENTRYPOINT is actionlint, so args only, no leading tool name.

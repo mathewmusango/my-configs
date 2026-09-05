@@ -11,7 +11,7 @@
 #   scripts/checks/local.sh shell jsonc        # selected surfaces, changed only
 #
 # Surface names match the container/checks/compose.yml services:
-#   jsonc · shell · yaml (actionlint) · yaml-syntax
+#   jsonc · shell · yaml-actionlint · yaml-syntax
 #
 # Pre-commit per-file fast path: scripts/checks/changed.sh (install via
 # `git config core.hooksPath .githooks`).
@@ -42,7 +42,7 @@ for arg in "$@"; do
   esac
 done
 
-ALL="jsonc shell yaml yaml-syntax"
+ALL="jsonc shell yaml-actionlint yaml-syntax"
 if [ -z "$SURFACES" ]; then
   SURFACES="$ALL"
 fi
@@ -68,7 +68,7 @@ surface_touched() {
   case "$1" in
     jsonc)            grep -qE '\.jsonc$|scripts/checks/jsonc\.py$' || return 1 ;;
     shell)            grep -qE '\.sh$|(^|/)\.githooks/' || return 1 ;;
-    yaml|yaml-syntax) grep -qE '\.ya?ml$' || return 1 ;;
+    yaml-actionlint|yaml-syntax) grep -qE '\.ya?ml$' || return 1 ;;
   esac
 }
 
