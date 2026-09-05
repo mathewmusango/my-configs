@@ -3,6 +3,7 @@
 ```text
 dotfiles/
   ├── fastfetch/
+  ├── reflector/
   ├── scripts/
   ├── yay/
   ├── zsh(ohmyzsh)/
