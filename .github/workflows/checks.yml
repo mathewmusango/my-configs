@@ -5,9 +5,10 @@ name: checks
 # workflows checks-{jsonc,shell,yaml}.yml — each self-gates on a native
 # git-diff detect, so irrelevant checks SKIP (report success) and a ruleset
 # can require them all. GitHub requires reusable workflows at the TOP level
-# of .github/workflows/ (subdirectories are rejected). Names come from the
-# filenames/job keys (no name: overrides). The reusables can also be called
-# from other repos:
+# of .github/workflows/ (subdirectories are rejected). The reusables carry
+# display names "checks/<surface>" (run-group labels); caller/leaf job keys
+# drive the commit-status names (no name: overrides on jobs).
+# The reusables can also be called from other repos:
 #   uses: mathewmusango/dotfiles/.github/workflows/checks-yaml.yml@main
 # No paths filter here: every push to main runs the aggregator, and each
 # reusable decides whether its check applies.
