@@ -1,25 +1,25 @@
 #!/usr/bin/env sh
 # One entry point for the local (stage-1) checks — a thin driver over the
-# check-compose.yaml services. Portable: no host tool installs (the images
-# mirror the CI tools exactly). Default: run every surface whose files changed
-# (diff-gated, mirroring the CI checks skip-model). --full runs all surfaces
-# unconditionally.
+# compose/checks/compose.yml services. Portable: no host tool installs (the
+# images mirror the CI tools exactly). Default: run every surface whose files
+# changed (diff-gated, mirroring the CI checks skip-model). --full runs all
+# surfaces unconditionally (use for a first run / fresh clone).
 #
 # Usage:
-#   scripts/check_local.sh                     # all surfaces, changed files only
-#   scripts/check_local.sh --full              # all surfaces, whole repo
-#   scripts/check_local.sh shell jsonc         # selected surfaces, changed only
+#   scripts/checks/local.sh                    # all surfaces, changed files only
+#   scripts/checks/local.sh --full             # all surfaces, whole repo
+#   scripts/checks/local.sh shell jsonc        # selected surfaces, changed only
 #
-# Surface names match the check-compose.yaml services:
+# Surface names match the compose/checks/compose.yml services:
 #   jsonc · shell · yaml (actionlint) · yaml-syntax
 #
-# Pre-commit per-file fast path: scripts/check_changed.sh (install via
+# Pre-commit per-file fast path: scripts/checks/changed.sh (install via
 # `git config core.hooksPath .githooks`).
 
 set -eu
 
 # shellcheck disable=SC1007  # CDPATH= cd is the intentional empty-CD cd idiom
-ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 cd "$ROOT"
 
 # --- CLI ---------------------------------------------------------------------
@@ -58,7 +58,7 @@ fi
 surface_touched() {
   # $1 = surface name; reads $CHANGED on stdin
   case "$1" in
-    jsonc)            grep -qE '\.jsonc$|check_jsonc\.py$' || return 1 ;;
+    jsonc)            grep -qE '\.jsonc$|scripts/checks/jsonc\.py$' || return 1 ;;
     shell)            grep -qE '\.sh$|(^|/)\.githooks/' || return 1 ;;
     yaml|yaml-syntax) grep -qE '\.ya?ml$' || return 1 ;;
   esac
@@ -77,7 +77,7 @@ run_surface() {
     reason="changed"
   fi
   echo "== $svc ($reason) =="
-  podman-compose -f check-compose.yaml run --rm "$svc"
+  podman-compose -f compose/checks/compose.yml run --rm "$svc"
 }
 
 status=0

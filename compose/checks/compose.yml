@@ -1,15 +1,16 @@
 # Local (stage-1) checks — one service per check, mirroring the checks/
 # reusable workflows EXACTLY (same commands, purpose-built tool images).
 # Portable: no host tool installs — dotfiles' checks run anywhere podman does.
+# Mounts the REPO ROOT at /repo (this file sits two levels below the root).
 #
-# Preferred entry point — scripts/check_local.sh (drives these services,
+# Preferred entry point — scripts/checks/local.sh (drives these services,
 # diff-gated by default, --full for a whole-repo pass, per-surface selection):
-#   scripts/check_local.sh          # all surfaces, changed files only
-#   scripts/check_local.sh --full   # all surfaces, whole repo
+#   scripts/checks/local.sh          # all surfaces, changed files only
+#   scripts/checks/local.sh --full   # all surfaces, whole repo
 #
 # Raw compose loop (same thing, no driver):
-#   podman-compose -f check-compose.yaml run --rm <service>
-# Pre-commit per-file fast path: scripts/check_changed.sh.
+#   podman-compose -f compose/checks/compose.yml run --rm <service>
+# Pre-commit per-file fast path: scripts/checks/changed.sh.
 # The GitHub workflows remain the authoritative gate (stage 2). All scans are
 # extension-wide across the whole repo (.git excluded) so NEW files in new
 # locations are never missed. First run pulls the tool images (network).
@@ -25,14 +26,14 @@ services:
     image: docker.io/library/python:alpine
     working_dir: /repo
     volumes:
-      - .:/repo:ro
-    command: ["sh", "-c", "python3 scripts/check_jsonc.py && if ls fastfetch/*/ >/dev/null 2>&1; then for d in fastfetch/*/; do if [ ! -f \"$$d/config.jsonc\" ] || [ ! -f \"$$d/screenshot.png\" ]; then echo \"incomplete design: $$d\"; exit 1; fi; done; echo 'all designs complete'; else echo 'no fastfetch designs — skipping'; fi"]
+      - ../..:/repo:ro
+    command: ["sh", "-c", "python3 scripts/checks/jsonc.py && if ls fastfetch/*/ >/dev/null 2>&1; then for d in fastfetch/*/; do if [ ! -f \"$$d/config.jsonc\" ] || [ ! -f \"$$d/screenshot.png\" ]; then echo \"incomplete design: $$d\"; exit 1; fi; done; echo 'all designs complete'; else echo 'no fastfetch designs — skipping'; fi"]
 
   shell:
     image: docker.io/koalaman/shellcheck-alpine:latest
     working_dir: /repo
     volumes:
-      - .:/repo:ro
+      - ../..:/repo:ro
     command: ["sh", "-c", "find . -path './.git' -prune -o -type f \\( -name '*.sh' -o -path './.githooks/*' \\) -print0 2>/dev/null | xargs -0 -r shellcheck -S warning"]
 
   yaml:
@@ -42,12 +43,12 @@ services:
     image: docker.io/rhysd/actionlint:latest
     working_dir: /repo
     volumes:
-      - .:/repo:ro
+      - ../..:/repo:ro
     command: ["-no-color"]
 
   yaml-syntax:
     image: docker.io/library/ruby:alpine
     working_dir: /repo
     volumes:
-      - .:/repo:ro
+      - ../..:/repo:ro
     command: ["sh", "-c", "find . -path './.git' -prune -o -type f \\( -name '*.yml' -o -name '*.yaml' \\) -print 2>/dev/null | while IFS= read -r f; do ruby -ryaml -e \"YAML.load_file(ARGV[0])\" \"$$f\" || { echo \"FAILED: $$f\"; exit 1; }; done || exit 1; echo 'yaml-syntax: all files parsed'"]

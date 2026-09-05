@@ -3,12 +3,12 @@
 ```text
 dotfiles/
   ├── .githooks/
+  ├── compose/
   ├── fastfetch/
   ├── reflector/
   ├── scripts/
   ├── yay/
   ├── zsh(ohmyzsh)/
-  ├── check-compose.yaml
   ├── LICENSE
   └── README.md
 ```
