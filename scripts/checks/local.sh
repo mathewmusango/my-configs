@@ -3,12 +3,12 @@
 # container/checks/compose.yml services. Portable: no host tool installs (the
 # images mirror the CI tools exactly). Default: run every surface whose files
 # changed (diff-gated, mirroring the CI checks skip-model). --full runs all
-# surfaces unconditionally (use for a first run / fresh clone). Lists the
-# files each surface checks (indented under the surface header).
+# surfaces unconditionally (use for a first run / fresh clone).
 #
 # Usage:
 #   scripts/checks/local.sh                    # all surfaces, changed files only
 #   scripts/checks/local.sh --full             # all surfaces, whole repo
+#   scripts/checks/local.sh --full --verbose   # + list the files each check scans
 #   scripts/checks/local.sh shell jsonc        # selected surfaces, changed only
 #
 # Surface names match the container/checks/compose.yml services:
@@ -33,12 +33,14 @@ fi
 
 # --- CLI ---------------------------------------------------------------------
 MODE="diff"   # diff | full
+VERBOSE=0
 SURFACES=""
 for arg in "$@"; do
   case "$arg" in
     --full) MODE="full" ;;
     --diff) MODE="diff" ;;
-    -h|--help) sed -n '2,22p' "$0"; exit 0 ;;
+    --verbose|-v) VERBOSE=1 ;;
+    -h|--help) sed -n '2,24p' "$0"; exit 0 ;;
     *) SURFACES="$SURFACES $arg" ;;
   esac
 done
@@ -107,7 +109,9 @@ for svc in $SURFACES; do
   fi
 
   printf '%s== %s (%s) ==%s\n' "$BOLD" "$svc" "$reason" "$NC"
-  surface_files "$svc" | sed 's#^#    #'
+  if [ "$VERBOSE" -eq 1 ]; then
+    surface_files "$svc" | sed 's#^#    #'
+  fi
   if podman-compose -f container/checks/compose.yml run --rm "$svc"; then
     printf '%s✅ %s (%s) passed%s\n' "$GREEN" "$svc" "$reason" "$NC"
   else
