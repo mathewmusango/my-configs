@@ -2,17 +2,15 @@ name: Checks
 
 # Aggregator: one workflow per repo, name "Checks". Holds the triggers (only
 # top-level workflow files are event-triggered) and calls the per-check
-# reusables in checks/ — which can also be reused from other repos via
-# `uses: mathewmusango/dotfiles/.github/workflows/checks/<name>.yml@main`.
+# reusables in checks/ — each self-gates on a dorny/paths-filter diff, so
+# irrelevant checks SKIP (report success) and a ruleset can require them all.
+# The reusables can also be called from other repos:
+#   uses: mathewmusango/dotfiles/.github/workflows/checks/<name>.yml@main
+# No paths filter here: every push to main runs the aggregator, and each
+# reusable decides whether its check applies.
 on:
   push:
     branches: [main]
-    paths:
-      - "**/*.jsonc"
-      - "scripts/check_jsonc.py"
-      - "**/*.sh"
-      - "**/*.yml"
-      - "**/*.yaml"
   workflow_dispatch: {}
 
 permissions:

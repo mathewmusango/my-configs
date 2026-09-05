@@ -1,8 +1,12 @@
 name: Checks / YAML
 
-# Reusable (workflow_call) — called by the root checks.yml aggregator.
+# Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
 # actionlint on the GitHub Actions workflows + a YAML syntax parse of every
-# yml/yaml in the repo (extension-wide — new yaml files are never missed).
+# yml/yaml in the repo (extension-wide — new yaml files are never missed, and
+# workflow-file edits trigger actionlint: self-validation). A detect job
+# (dorny/paths-filter) gates the checks: when the push/PR touches no yml/yaml
+# files they SKIP — report success — so requiring them never blocks unrelated
+# commits. One job per stage so a ruleset can gate each check independently.
 on:
   workflow_call:
 
@@ -10,8 +14,31 @@ permissions:
   contents: read
 
 jobs:
-  yaml:
-    name: yaml syntax (all yml/yaml in the repo)
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.filter.outputs.changed }}
+    steps:
+      # fetch-depth 0: push diffs compare against github.event.before, so the
+      # previous commit must exist locally (shallow checkout would fail).
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - id: filter
+        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+        uses: dorny/paths-filter@v3
+        with:
+          base: ${{ github.event_name == 'push' && github.event.before || github.event.pull_request.base.sha }}
+          ref: ${{ github.sha }}
+          filters: |
+            changed:
+              - '**/*.yml'
+              - '**/*.yaml'
+
+  checks-yaml-syntax:
+    name: checks-yaml-syntax
+    needs: detect
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect.outputs.changed == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -23,7 +50,10 @@ jobs:
             echo "ok: $f"
           done
 
-  actionlint:
+  checks-yaml-actionlint:
+    name: checks-yaml-actionlint
+    needs: detect
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect.outputs.changed == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
