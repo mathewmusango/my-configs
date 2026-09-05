@@ -32,8 +32,8 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-  checks-jsonc:
-    name: checks-jsonc
+  jsonc:
+    name: jsonc
     needs: detect
     if: ${{ github.event_name == 'workflow_dispatch' || needs.detect.outputs.changed == 'true' }}
     runs-on: ubuntu-latest

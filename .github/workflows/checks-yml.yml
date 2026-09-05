@@ -1,4 +1,4 @@
-name: "Checks / YML"
+name: "Checks / YAML"
 
 # Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
 # actionlint on the GitHub Actions workflows + a YAML syntax parse of every
@@ -34,8 +34,8 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-  checks-yaml-syntax:
-    name: checks-yaml-syntax
+  syntax:
+    name: syntax
     needs: detect
     if: ${{ github.event_name == 'workflow_dispatch' || needs.detect.outputs.changed == 'true' }}
     runs-on: ubuntu-latest
@@ -49,8 +49,8 @@ jobs:
             echo "ok: $f"
           done
 
-  checks-yaml-actionlint:
-    name: checks-yaml-actionlint
+  actionlint:
+    name: actionlint
     needs: detect
     if: ${{ github.event_name == 'workflow_dispatch' || needs.detect.outputs.changed == 'true' }}
     runs-on: ubuntu-latest

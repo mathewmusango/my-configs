@@ -23,8 +23,7 @@ jobs:
     name: JSONC
     uses: ./.github/workflows/checks-jsonc.yml
   shell:
-    name: Shell
     uses: ./.github/workflows/checks-shell.yml
   yml:
-    name: YAML
+    name: YML
     uses: ./.github/workflows/checks-yml.yml
