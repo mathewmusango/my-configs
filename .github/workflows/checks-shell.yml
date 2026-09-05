@@ -1,3 +1,5 @@
+name: "checks/shell"
+
 # Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
 # Shellcheck on every shell script in the repo, plus .githooks/* (extension-
 # wide so NEW shell scripts in new locations are never missed). A native

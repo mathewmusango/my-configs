@@ -1,3 +1,5 @@
+name: "checks/jsonc"
+
 # Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
 # Validate every fastfetch design config (config.jsonc) parses as JSON, and
 # every design folder ships both files (config.jsonc + screenshot.png). A

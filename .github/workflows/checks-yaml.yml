@@ -1,3 +1,5 @@
+name: "checks/yaml"
+
 # Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
 # actionlint on the GitHub Actions workflows + a YAML syntax parse of every
 # yml/yaml in the repo (extension-wide — new yaml files are never missed, and
