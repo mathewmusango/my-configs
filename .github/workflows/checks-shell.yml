@@ -2,11 +2,11 @@ name: "Checks / Shell"
 
 # Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
 # Shellcheck on every shell script in the repo, plus .githooks/* (extension-
-# wide so NEW shell scripts in new locations are never missed). A detect job
-# (dorny/paths-filter) gates the check: when the push/PR touches no shell
-# files the check SKIPS — reports success — so requiring it never blocks
-# unrelated commits.
-
+# wide so NEW shell scripts in new locations are never missed). A native
+# git-diff detect job (no third-party action) gates the check: when the
+# push/PR touches no shell files the check SKIPS — reports success — so
+# requiring it never blocks unrelated commits. Same globs as
+# scripts/checks/local.sh.
 on:
   workflow_call:
 
@@ -26,14 +26,12 @@ jobs:
           fetch-depth: 0
       - id: filter
         if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
-        uses: dorny/paths-filter@v3
-        with:
-          base: ${{ github.event_name == 'push' && github.event.before || github.event.pull_request.base.sha }}
-          ref: ${{ github.sha }}
-          filters: |
-            changed:
-              - '**/*.sh'
-              - '.githooks/**'
+        shell: bash
+        run: |
+          base="${{ github.event_name == 'push' && github.event.before || github.event.pull_request.base.sha }}"
+          if git diff --name-only --diff-filter=ACM "$base" "$GITHUB_SHA" | grep -qE '\.sh$|(^|/)\.githooks/'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
   checks-shell-shellcheck:
     name: checks-shell-shellcheck
