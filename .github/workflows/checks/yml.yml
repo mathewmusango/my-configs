@@ -1,4 +1,4 @@
-name: "Checks / YAML"
+name: "Checks / YML"
 
 # Reusable (workflow_call) — called by the repo's root checks.yml aggregator.
 # actionlint on the GitHub Actions workflows + a YAML syntax parse of every
