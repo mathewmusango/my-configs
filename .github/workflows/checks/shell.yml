@@ -1,14 +1,10 @@
-name: Checks Shell
+name: Checks / Shell
 
-# Shellcheck on every shell script in the repo (fastfetch/replace.sh, etc.) —
-# runs once on main (or dispatch) when any .sh changes, anywhere. Extension-wide
-# so NEW shell scripts in new locations are never missed.
+# Reusable (workflow_call) — called by the root checks.yml aggregator.
+# Shellcheck on every shell script in the repo (modules' install.sh, etc.) —
+# extension-wide so NEW shell scripts in new locations are never missed.
 on:
-  push:
-    branches: [main]
-    paths:
-      - "**/*.sh"
-  workflow_dispatch: {}
+  workflow_call:
 
 permissions:
   contents: read

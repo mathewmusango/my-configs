@@ -1,0 +1,30 @@
+name: Checks
+
+# Aggregator: one workflow per repo, name "Checks". Holds the triggers (only
+# top-level workflow files are event-triggered) and calls the per-check
+# reusables in checks/ — which can also be reused from other repos via
+# `uses: mathewmusango/dotfiles/.github/workflows/checks/<name>.yml@main`.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.jsonc"
+      - "scripts/check_jsonc.py"
+      - "**/*.sh"
+      - "**/*.yml"
+      - "**/*.yaml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  jsonc:
+    name: Checks / JSONC
+    uses: ./.github/workflows/checks/jsonc.yml
+  shell:
+    name: Checks / Shell
+    uses: ./.github/workflows/checks/shell.yml
+  yml:
+    name: Checks / YAML
+    uses: ./.github/workflows/checks/yml.yml
